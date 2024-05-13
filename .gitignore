@@ -1,0 +1,8 @@
+wmc-webprojekt-firebase-key.json
+
+# npm
+node_modules
+
+*.log
+*.gz
+
