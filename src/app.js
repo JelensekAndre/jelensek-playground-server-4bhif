@@ -19,6 +19,7 @@ const db = getFirestore();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }));
+
 // Routes
 app.get('/', (req, res) => {
     res.send('Home Page');
@@ -34,6 +35,16 @@ app.get('/bikes', async (req, res) => {
     res.json(data);
 })
 
+app.get('/newsletter', async (req, res) => {
+    const bikes = await db.collection('bikes').orderBy('id', 'desc').limit(6).get();
+    
+    let data = [];
+    bikes.forEach(doc => {
+        data.push(doc.data());
+    });
+    res.json(data);
+})
+
 app.get('/bikes/:type/:id', async (req, res) => {
     const bike = await db.collection('bikes').where('model', '==', req.params.type).where('id', '==', req.params.id).get();
     
@@ -42,8 +53,6 @@ app.get('/bikes/:type/:id', async (req, res) => {
         data.push(doc.data());
     });
     res.json(data);
-
-    res.json(bike);
 })
 
 app.get('/bikes/:id', async (req, res) => {
